@@ -20,7 +20,7 @@ no data leaving your VPC.
 ## Quickstart
 
 ```bash
-git clone https://github.com/shivareddy519/postmortem-copilot
+git clone https://github.com/agentbantu-wq/postmortem-copilot
 cd postmortem-copilot
 pip install -e .
 export OPENAI_API_KEY=sk-...
