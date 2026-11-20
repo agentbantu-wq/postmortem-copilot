@@ -1,0 +1,20 @@
+# Rename to CITATION.cff and commit at the repo root of postmortem-copilot
+cff-version: 1.2.0
+title: postmortem-copilot
+version: 1.0.0
+date-released: 2026-10-14
+authors:
+  - family-names: Sampathi
+    given-names: Shiva
+repository-code: https://github.com/agentbantu-wq/postmortem-copilot
+license: MIT
+abstract: >-
+  Turn incident timelines into blameless postmortem drafts with any
+  OpenAI-compatible LLM. Standalone CLI, zero dependencies, works with
+  local models so incident data never leaves your VPC.
+keywords:
+  - incident-response
+  - postmortem
+  - site-reliability-engineering
+  - llm
+  - observability
