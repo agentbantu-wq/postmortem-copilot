@@ -1,0 +1,73 @@
+[
+  {
+    "type": "message",
+    "ts": "1789740131.000000",
+    "text": "Firing: CheckoutLatencyHigh \u2014 p99 latency > 2s for 5m (checkout-api, prod-us)",
+    "subtype": "bot_message",
+    "username": "alertmanager",
+    "bot_id": "B012345"
+  },
+  {
+    "type": "message",
+    "subtype": "channel_join",
+    "ts": "1789740191.000000",
+    "user": "U019283",
+    "text": "<@U019283> has joined the channel"
+  },
+  {
+    "type": "message",
+    "ts": "1789740344.000000",
+    "text": "Acknowledged page. Dashboard shows latency spike starting ~13:58, error rate still < 0.1%.",
+    "user": "U019283",
+    "user_profile": {
+      "display_name": "oncall",
+      "real_name": "On-Call Engineer"
+    }
+  },
+  {
+    "type": "message",
+    "ts": "1789740662.000000",
+    "text": "checkout-api v2.14.3 deployed to prod-us at 13:57 by CI pipeline (commit 9f3ac21).",
+    "subtype": "bot_message",
+    "username": "deploy-bot",
+    "bot_id": "B067890"
+  },
+  {
+    "type": "message",
+    "ts": "1789740997.000000",
+    "text": "v2.14.3 changed pricing-cache TTL from 300s to 30s. Cache hit ratio dropped 98% -> 41%. Looks like a cache stampede on the pricing DB.",
+    "user": "U019283",
+    "user_profile": {
+      "display_name": "oncall",
+      "real_name": "On-Call Engineer"
+    }
+  },
+  {
+    "type": "message",
+    "ts": "1789741145.000000",
+    "text": "Rolled back to v2.14.2. Latency recovering.",
+    "user": "U019283",
+    "user_profile": {
+      "display_name": "oncall",
+      "real_name": "On-Call Engineer"
+    }
+  },
+  {
+    "type": "message",
+    "ts": "1789741490.000000",
+    "text": "Resolved: CheckoutLatencyHigh \u2014 p99 back under 400ms.",
+    "subtype": "bot_message",
+    "username": "alertmanager",
+    "bot_id": "B012345"
+  },
+  {
+    "type": "message",
+    "ts": "1789741872.000000",
+    "text": "Status page updated: incident resolved, ~27 min of degraded checkout latency, no failed payments observed.",
+    "user": "U045678",
+    "user_profile": {
+      "display_name": "comms",
+      "real_name": "Comms Lead"
+    }
+  }
+]
