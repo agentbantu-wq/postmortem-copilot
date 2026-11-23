@@ -58,6 +58,35 @@ needs `timestamp`, `source`, and `message`:
 Events are sorted chronologically automatically. Sources can be anything:
 `alertmanager`, `deploy-bot`, `oncall`, `comms`, `slack`, ...
 
+## Importing from Slack
+
+Incident timelines usually live in a Slack channel, not a JSON file. `pmc
+import` converts a Slack channel export (the JSON array Slack's export
+tool writes, one file per channel per day) into a timeline:
+
+```bash
+pmc import slack inc-checkout-2026-09-18.json -o timeline.json
+pmc generate timeline.json --service checkout-api --severity SEV-2
+```
+
+- Epoch timestamps (`ts`) become ISO-8601 UTC; messages are sorted
+  chronologically.
+- The author becomes the source: `slack:oncall`,
+  `slack:deploy-bot`. Bot posts are kept — deploy and alert bots are often
+  the most reliable signal in an incident channel.
+- Channel housekeeping (joins, leaves, topic changes) and empty messages
+  are skipped, and the import reports how many it dropped. Message text is
+  kept verbatim, including `<@U...>` mentions.
+- Alert bots that post with empty `text` and the content in an attachment
+  are handled via the attachment's `fallback` text.
+
+Try it with the bundled example (the same fictional incident as the
+sample timeline):
+
+```bash
+pmc import slack examples/sample-slack-export.json -o timeline.json
+```
+
 ## How it works
 
 1. **Parse & validate** the timeline (`timeline.py`)
@@ -79,7 +108,8 @@ python -m pytest
 
 ## Roadmap
 
-- [ ] Import timelines directly from Slack / PagerDuty / incident.io exports
+- [x] Import timelines directly from Slack exports (`pmc import slack`)
+- [ ] Import timelines directly from PagerDuty / incident.io exports
 - [ ] `--format confluence|notion` output targets
 - [ ] Action-item tracking (open GitHub/Jira issues from the table)
 - [ ] Eval harness scoring draft quality against real postmortems
