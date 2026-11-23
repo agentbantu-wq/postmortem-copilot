@@ -8,6 +8,7 @@ import sys
 
 from . import __version__
 from .generator import DEFAULT_MODEL, generate
+from .importers import load_slack_export
 from .timeline import load_timeline
 
 SAMPLE_TIMELINE = {
@@ -91,6 +92,41 @@ def cmd_generate(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_import(args: argparse.Namespace) -> int:
+    """Convert a chat/incident-platform export into a timeline JSON file."""
+    if args.format == "slack":
+        try:
+            events, skipped = load_slack_export(args.export)
+        except (OSError, ValueError) as exc:
+            print(f"Error reading Slack export: {exc}", file=sys.stderr)
+            return 1
+    else:  # argparse choices= guard; unreachable in practice
+        print(f"Unknown import format: {args.format}", file=sys.stderr)
+        return 1
+
+    data = {
+        "events": [
+            {
+                "timestamp": e.timestamp,
+                "source": e.source,
+                "message": e.message,
+            }
+            for e in events
+        ]
+    }
+    text = json.dumps(data, indent=2)
+    if args.out:
+        with open(args.out, "w", encoding="utf-8") as f:
+            f.write(text + "\n")
+        print(
+            f"Wrote {len(events)} events to {args.out} "
+            f"({skipped} message(s) skipped)"
+        )
+    else:
+        print(text)
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="pmc",
@@ -122,6 +158,19 @@ def build_parser() -> argparse.ArgumentParser:
     )
     p_gen.add_argument("-o", "--out", default=None, help="Write Markdown to file instead of stdout.")
     p_gen.set_defaults(func=cmd_generate)
+
+    p_imp = sub.add_parser(
+        "import", help="Convert a chat export into a timeline JSON file."
+    )
+    p_imp.add_argument(
+        "format", choices=["slack"], help="Export format to import."
+    )
+    p_imp.add_argument("export", help="Path to the export JSON file.")
+    p_imp.add_argument(
+        "-o", "--out", default=None,
+        help="Write timeline JSON to file (default: print to stdout).",
+    )
+    p_imp.set_defaults(func=cmd_import)
     return parser
 
 
